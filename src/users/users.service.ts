@@ -1,24 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
-export type User = any;
+import { PrismaService } from '../database/prisma.service';
+import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
+  constructor(private readonly prismaService: PrismaService) {}
 
-  create(createUserDto: CreateUsersDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUsersDto) {
+    if (!createUserDto) {
+      throw new HttpException("Missing data", HttpStatus.BAD_REQUEST);
+    }
+
+    const encryptedPassword = await bcrypt.hash(createUserDto.password, 10);
+
+    this.prismaService.user.create({
+      data: {
+        ...createUserDto, 
+        password: encryptedPassword
+      }
+    });
+
+    return {...createUserDto, password: ""};
   }
 
   findAll() {
@@ -26,7 +31,7 @@ export class UsersService {
   }
 
   async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+    return;
   }
 
   update(id: number, updateUserDto: UpdateUsersDto) {

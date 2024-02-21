@@ -6,18 +6,21 @@ import {
   Patch,
   Param,
   Delete,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-users.dto';
 import { UpdateUsersDto } from './dto/update-users.dto';
+import { Response } from 'express';
 
 @Controller('user')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUsersDto) {
-    return this.userService.create(createUserDto);
+  @Post("create")
+  create(@Body() createUserDto: CreateUsersDto, @Res() res: Response) {
+    return res.status(HttpStatus.CREATED).json(this.userService.create(createUserDto));
   }
 
   @Get()
