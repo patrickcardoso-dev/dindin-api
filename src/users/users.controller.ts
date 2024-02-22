@@ -38,7 +38,7 @@ export class UsersController {
     return this.userService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete(':id') 
   remove(@Param('id') id: string, @Res() res: Response) {
     return res.status(HttpStatus.NO_CONTENT).json(this.userService.remove(+id));
   }

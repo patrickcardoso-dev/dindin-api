@@ -37,7 +37,7 @@ export class UsersService {
   update(id: number, updateUserDto: UpdateUsersDto) {
     return `This action updates a #${id} user`;
   }
-
+ 
   remove(id: number): string {
     const deletedUser = this.user[id];
     this.user = this.user.filter((_, index) => index !== id);
