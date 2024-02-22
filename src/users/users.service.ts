@@ -38,7 +38,9 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: number): string {
+    const deletedUser = this.user[id];
+    this.user = this.user.filter((_, index) => index !== id);
+    return `User with id ${id} deleted`;
   }
 }

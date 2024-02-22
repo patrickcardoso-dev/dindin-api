@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
   Res,
-  HttpStatus,
+  HttpStatus
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-users.dto';
@@ -39,7 +39,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  remove(@Param('id') id: string, @Res() res: Response) {
+    return res.status(HttpStatus.NO_CONTENT).json(this.userService.remove(+id));
   }
 }
